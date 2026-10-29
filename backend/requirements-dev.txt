@@ -1,5 +1,4 @@
 faster-whisper==1.2.0
 streamlit==1.50.0
-ruff==0.16.10
 pytest==8.4.2
 ruff==0.16.10
