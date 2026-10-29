@@ -6,15 +6,71 @@ from faster_whisper import WhisperModel
 TAILLE_MODELE = "medium"
 LANGUE = "fr"
 
-# vocabulaire médical pour aider Whisper à bien écrire les termes difficiles
 CONTEXTE_MEDICAL = (
-    "Compte-rendu médical. Patient, antécédents, auscultation, tension artérielle, "
-    "fréquence cardiaque, posologie, mg, paracétamol, amoxicilline, dyspnée, "
-    "HTA, diabète de type 2, ECG, IRM, scanner."
+    # Consultation et antécédents
+    "Compte rendu médical, consultation, motif de consultation, "
+    "patient, patiente, antécédents médicaux et chirurgicaux, "
+    "antécédents familiaux, allergie, traitement habituel, "
+    "hospitalisation, suivi médical, examen clinique, "
+
+    # Symptômes
+    "douleur thoracique, douleur abdominale, céphalée, migraine, "
+    "fièvre, frissons, fatigue, asthénie, vertiges, malaise, "
+    "nausées, vomissements, diarrhée, constipation, "
+    "toux sèche, expectoration, dyspnée, essoufflement, "
+    "palpitations, œdème, éruption cutanée, prurit, "
+
+    # Examen et mesures
+    "auscultation cardiaque et pulmonaire, palpation abdominale, "
+    "tension artérielle, pression artérielle, fréquence cardiaque, "
+    "fréquence respiratoire, saturation en oxygène, température, "
+    "poids, taille, indice de masse corporelle, "
+    "systolique, diastolique, pouls, glycémie capillaire, "
+
+    # Pathologies
+    "hypertension artérielle, HTA, diabète de type 1, "
+    "diabète de type 2, dyslipidémie, hypercholestérolémie, "
+    "asthme, bronchite, pneumonie, insuffisance respiratoire, "
+    "bronchopneumopathie chronique obstructive, BPCO, "
+    "insuffisance cardiaque, fibrillation atriale, "
+    "insuffisance rénale, infection urinaire, "
+    "reflux gastro-œsophagien, anémie, hypothyroïdie, "
+    "arthrose, lombalgie, sciatique, "
+
+    # Examens complémentaires
+    "bilan sanguin, numération formule sanguine, NFS, "
+    "hémoglobine, leucocytes, plaquettes, protéine C réactive, CRP, "
+    "créatinine, débit de filtration glomérulaire, DFG, "
+    "ionogramme sanguin, sodium, potassium, "
+    "glycémie à jeun, hémoglobine glyquée, HbA1c, "
+    "transaminases, ASAT, ALAT, TSH, ferritine, "
+    "électrocardiogramme, ECG, échographie, radiographie, "
+    "imagerie par résonance magnétique, IRM, scanner, "
+    "examen cytobactériologique des urines, ECBU, "
+
+    # Médicaments
+    "paracétamol, amoxicilline, acide clavulanique, "
+    "ibuprofène, metformine, insuline, "
+    "amlodipine, ramipril, bisoprolol, furosémide, "
+    "atorvastatine, oméprazole, salbutamol, "
+    "prednisone, lévothyroxine, "
+
+    # Prescription et unités
+    "prescription, ordonnance, posologie, durée du traitement, "
+    "comprimé, gélule, sachet, sirop, injection, "
+    "voie orale, voie intraveineuse, voie sous-cutanée, "
+    "milligramme, mg, microgramme, millilitre, mL, "
+    "gramme, g, unité internationale, UI, "
+    "une prise par jour, matin et soir, si besoin, "
+
+    # Conclusion
+    "diagnostic, hypothèse diagnostique, prise en charge, "
+    "surveillance, réévaluation, rendez-vous de contrôle, "
+    "avis spécialisé, orientation, conduite à tenir."
 )
 
 
-@lru_cache(maxsize=1)  # garde le modèle en mémoire après le premier chargement
+@lru_cache(maxsize=1)
 def charger_modele(taille: str = TAILLE_MODELE) -> WhisperModel:
     # int8 = calculs compressés, plus rapides et moins gourmands sur CPU
     return WhisperModel(taille, device="cpu", compute_type="int8")
@@ -39,7 +95,8 @@ def transcrire(audio) -> str:
 # Permet de tester depuis le terminal sans l'interface
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Utilisation · python transcription.py chemin_du_fichier_audio")
+        print("Utilisation · python transcription.py LaFontaine-Lecorbeauetlerenard.mp3")
+
         sys.exit(1)
 
     texte = transcrire(sys.argv[1])
