@@ -1,7 +1,13 @@
+# Python
 .venv/
 __pycache__/
-.git/
+.pytest_cache/
+.ruff_cache/
 
+# Secrets (mot de passe MySQL…) · ne jamais les envoyer sur GitHub
+.env
+
+# Données de santé possibles · ne jamais les envoyer sur GitHub
 comptes_rendus/
 *.wav
 *.mp3

@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches: [main]
@@ -13,12 +14,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install ruff
+          cache: pip                                      # garde les téléchargements pip entre deux CI
+          cache-dependency-path: backend/requirements*.txt
+      - run: pip install -r backend/requirements.txt  # mêmes versions qu'en local
       - run: ruff check .
 
   docker:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: lint                                           # seulement si le lint a réussi
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t app-compte-rendu .
+      - run: docker build -t app-compte-rendu ./backend
+      - run: docker run --rm app-compte-rendu python -c "from app.transcription import transcrire; print('Import OK')"
