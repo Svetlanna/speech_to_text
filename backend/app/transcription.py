@@ -1,12 +1,10 @@
-# Transcription audio vers texte avec faster-whisper
-
 import sys
 from functools import lru_cache
 
 from faster_whisper import WhisperModel
 
 
-TAILLE_MODELE = "small"
+TAILLE_MODELE = "medium"
 LANGUE = "fr"
 
 # vocabulaire médical pour aider Whisper à bien écrire les termes difficiles
