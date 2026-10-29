@@ -1,0 +1,566 @@
+/* ==========================================================================
+   BRYNVEL — shell.css
+   The app shell: rail, command bar, page frame, drawer, modal, palette, toast
+   ========================================================================== */
+
+.app {
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  min-height: 100vh;
+  transition: grid-template-columns var(--dur) var(--ease);
+}
+
+.app[data-rail="collapsed"] { grid-template-columns: var(--rail-w-collapsed) minmax(0, 1fr); }
+
+/* The rail is sticky and 100vh tall, so on a long page the column behind it
+   would show canvas colour once you scroll. Paint the column itself. */
+@media (min-width: 1024px) {
+  .app {
+    background: linear-gradient(
+      to right,
+      var(--surface) 0,
+      var(--surface) var(--rail-w),
+      var(--canvas) var(--rail-w)
+    );
+  }
+  .app[data-rail="collapsed"] {
+    background: linear-gradient(
+      to right,
+      var(--surface) 0,
+      var(--surface) var(--rail-w-collapsed),
+      var(--canvas) var(--rail-w-collapsed)
+    );
+  }
+}
+
+/* ==========================================================================
+   Left rail
+   ========================================================================== */
+
+.rail {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-right: 1px solid var(--hairline);
+  overflow: hidden;
+}
+
+.rail__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: var(--topbar-h);
+  padding: 0 var(--s-4);
+  border-bottom: 1px solid var(--hairline);
+  flex: none;
+}
+
+/* Brand mark — three ascending signal bars. Not a square, not a clip-path tile. */
+.brand { display: flex; align-items: center; gap: var(--s-3); min-width: 0; }
+
+.brand__mark {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  flex: none;
+}
+.brand__mark i {
+  display: block;
+  width: 4px;
+  border-radius: 1.5px;
+  background: var(--accent);
+}
+.brand__mark i:nth-child(1) { height: 8px;  opacity: 0.45; }
+.brand__mark i:nth-child(2) { height: 14px; opacity: 0.72; }
+.brand__mark i:nth-child(3) { height: 20px; }
+
+.brand__word {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.0625rem;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.rail__scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--s-4) var(--s-3);
+  display: grid;
+  gap: var(--s-5);
+  align-content: start;
+}
+.rail__scroll::-webkit-scrollbar { width: 8px; }
+.rail__scroll::-webkit-scrollbar-thumb { background: var(--hairline); border-radius: var(--r-pill); }
+
+.navgroup { display: grid; gap: 2px; }
+
+.navgroup__title {
+  padding: 0 var(--s-3) var(--s-2);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  white-space: nowrap;
+}
+
+.navlink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--fg-soft);
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.navlink svg { width: 17px; height: 17px; flex: none; stroke-width: 1.7; }
+.navlink:hover { background: var(--surface-3); color: var(--fg); }
+
+.navlink[aria-current="page"] {
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-weight: 600;
+}
+/* Active marker rides the left edge — replaces a heavy filled pill */
+.navlink[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--s-3) * -1 + 1px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+}
+
+.navlink__tag {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  padding: 1px 6px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  color: var(--fg-mute);
+}
+.navlink__tag--live { background: var(--err-wash); color: var(--err); }
+
+/* Usage meter pinned to the rail foot */
+.rail__foot {
+  flex: none;
+  border-top: 1px solid var(--hairline);
+  padding: var(--s-4);
+  display: grid;
+  gap: var(--s-3);
+}
+
+.usage { display: grid; gap: var(--s-2); }
+.usage__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2);
+  font-size: var(--text-xs);
+}
+.usage__bar {
+  height: 4px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+.usage__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width var(--dur-slow) var(--ease);
+}
+
+.userchip {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2);
+  border-radius: var(--r-md);
+  width: 100%;
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease);
+}
+.userchip:hover { background: var(--surface-3); }
+.userchip__meta { min-width: 0; display: grid; }
+.userchip__name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.userchip__sub {
+  font-size: var(--text-xs);
+  color: var(--fg-mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Collapsed rail ------------------------------------------------------ */
+.app[data-rail="collapsed"] .brand__word,
+.app[data-rail="collapsed"] .navgroup__title,
+.app[data-rail="collapsed"] .navlink span,
+.app[data-rail="collapsed"] .navlink__tag,
+.app[data-rail="collapsed"] .usage,
+.app[data-rail="collapsed"] .userchip__meta { display: none; }
+
+.app[data-rail="collapsed"] .navlink { justify-content: center; padding-inline: 0; }
+.app[data-rail="collapsed"] .rail__head { justify-content: center; padding-inline: 0; }
+.app[data-rail="collapsed"] .rail__foot { justify-items: center; }
+.app[data-rail="collapsed"] .userchip { justify-content: center; }
+
+/* ==========================================================================
+   Command bar (top)
+   ========================================================================== */
+
+.main { min-width: 0; display: flex; flex-direction: column; }
+
+.cmdbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: var(--topbar-h);
+  padding: 0 var(--s-5);
+  background: color-mix(in srgb, var(--canvas) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--text-sm);
+  color: var(--fg-mute);
+  min-width: 0;
+}
+.crumbs b { color: var(--fg); font-weight: 600; }
+.crumbs svg { width: 14px; height: 14px; opacity: 0.5; flex: none; }
+
+.cmdbar__spacer { flex: 1; }
+
+/* Search trigger — opens the ⌘K palette */
+.searchtrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: 34px;
+  min-width: 240px;
+  padding: 0 var(--s-2) 0 var(--s-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--fg-mute);
+  font-size: var(--text-sm);
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.searchtrigger:hover { border-color: var(--fg-faint); color: var(--fg-soft); }
+.searchtrigger svg { width: 15px; height: 15px; flex: none; }
+.searchtrigger span { flex: 1; text-align: left; }
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  padding: 2px 5px;
+  border-radius: 5px;
+  border: 1px solid var(--hairline);
+  background: var(--surface-3);
+  color: var(--fg-mute);
+  line-height: 1.4;
+}
+
+.bell { position: relative; }
+.bell::after {
+  content: "";
+  position: absolute;
+  top: 7px; right: 8px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--err);
+  border: 2px solid var(--canvas);
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  background: var(--surface-3);
+}
+.avatar--sm { width: 26px; height: 26px; }
+.avatar--md { width: 32px; height: 32px; }
+.avatar--lg { width: 40px; height: 40px; }
+
+.railtoggle { display: inline-flex; }
+
+.railtoggle svg { transition: transform var(--dur) var(--ease); }
+.app[data-rail="collapsed"] .railtoggle svg { transform: rotate(180deg); }
+
+/* ==========================================================================
+   Page frame
+   ========================================================================== */
+
+.page {
+  flex: 1;
+  padding: var(--s-6) var(--s-5) var(--s-7);
+  display: grid;
+  gap: var(--s-5);
+  align-content: start;
+  max-width: 1560px;
+  width: 100%;
+}
+
+.pagehead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-5);
+  flex-wrap: wrap;
+}
+
+.pagehead__title { display: grid; gap: var(--s-2); }
+.pagehead h1 { font-size: var(--text-2xl); letter-spacing: -0.03em; }
+.pagehead__sub { font-size: var(--text-sm); color: var(--fg-mute); }
+.pagehead__actions { display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; }
+
+/* Section header used inside the canvas */
+.sechead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: var(--s-4);
+}
+.sechead h2 { font-size: var(--text-md); letter-spacing: -0.02em; }
+.sechead__meta { font-size: var(--text-xs); color: var(--fg-mute); }
+
+/* ==========================================================================
+   Slide-over drawer
+   ========================================================================== */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 14, 0.62);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur) var(--ease), visibility var(--dur) var(--ease);
+  z-index: var(--z-drawer);
+}
+.scrim[data-open="true"] { opacity: 1; visibility: visible; }
+
+.drawer {
+  position: fixed;
+  top: 0; right: 0;
+  height: 100vh;
+  width: min(440px, 100vw);
+  background: var(--surface);
+  border-left: 1px solid var(--hairline);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(100%);
+  transition: transform var(--dur) var(--ease);
+  z-index: calc(var(--z-drawer) + 1);
+  display: flex;
+  flex-direction: column;
+}
+.drawer[data-open="true"] { transform: translateX(0); }
+
+.drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--hairline);
+  flex: none;
+}
+.drawer__body { flex: 1; overflow-y: auto; padding: var(--s-5); display: grid; gap: var(--s-5); align-content: start; }
+.drawer__foot {
+  flex: none;
+  padding: var(--s-4) var(--s-5);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  gap: var(--s-2);
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
+   Command palette (⌘K)
+   ========================================================================== */
+
+.palette {
+  position: fixed;
+  top: 14vh;
+  left: 50%;
+  transform: translate(-50%, -8px);
+  width: min(560px, calc(100vw - 2rem));
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: calc(var(--z-modal) + 1);
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease),
+              visibility var(--dur-fast) var(--ease);
+}
+.palette[data-open="true"] { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+.palette__input {
+  width: 100%;
+  height: 52px;
+  padding: 0 var(--s-5);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--text-md);
+  color: var(--fg);
+}
+.palette__input:focus { outline: none; }
+.palette__input::placeholder { color: var(--fg-faint); }
+
+.palette__list { max-height: 320px; overflow-y: auto; padding: var(--s-2); }
+.palette__group { padding: var(--s-3) var(--s-3) var(--s-1); }
+
+.palette__item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-md);
+  font-size: var(--text-sm);
+  color: var(--fg-soft);
+  text-align: left;
+}
+.palette__item svg { width: 16px; height: 16px; flex: none; color: var(--fg-mute); }
+.palette__item:hover,
+.palette__item[data-active="true"] { background: var(--accent-wash); color: var(--accent); }
+.palette__item:hover svg,
+.palette__item[data-active="true"] svg { color: var(--accent); }
+.palette__item .kbd { margin-left: auto; }
+
+.palette__empty { padding: var(--s-6); text-align: center; font-size: var(--text-sm); color: var(--fg-mute); }
+
+/* ==========================================================================
+   Toast
+   ========================================================================== */
+
+.toasts {
+  position: fixed;
+  bottom: var(--s-5);
+  right: var(--s-5);
+  z-index: var(--z-toast);
+  display: grid;
+  gap: var(--s-2);
+  justify-items: end;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--ok);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  font-size: var(--text-sm);
+  pointer-events: auto;
+  animation: toast-in var(--dur) var(--ease);
+}
+.toast svg { width: 16px; height: 16px; color: var(--ok); flex: none; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   Mobile — rail becomes an off-canvas drawer
+   ========================================================================== */
+
+.railscrim { display: none; }
+
+@media (max-width: 1023px) {
+  .app,
+  .app[data-rail="collapsed"] { grid-template-columns: minmax(0, 1fr); }
+
+  .rail {
+    position: fixed;
+    top: 0; left: 0;
+    z-index: calc(var(--z-drawer) + 2);
+    width: var(--rail-w);
+    transform: translateX(-100%);
+    transition: transform var(--dur) var(--ease);
+  }
+  .app[data-mobilenav="open"] .rail { transform: translateX(0); }
+
+  /* Never render the collapsed-icon state on mobile */
+  .app[data-rail="collapsed"] .brand__word,
+  .app[data-rail="collapsed"] .navgroup__title,
+  .app[data-rail="collapsed"] .navlink span,
+  .app[data-rail="collapsed"] .navlink__tag,
+  .app[data-rail="collapsed"] .usage,
+  .app[data-rail="collapsed"] .userchip__meta { display: revert; }
+  .app[data-rail="collapsed"] .navlink { justify-content: flex-start; padding-inline: var(--s-3); }
+  .app[data-rail="collapsed"] .rail__head { justify-content: flex-start; padding-inline: var(--s-4); }
+
+  .railscrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 8, 14, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--dur) var(--ease), visibility var(--dur) var(--ease);
+    z-index: calc(var(--z-drawer) + 1);
+  }
+  .app[data-mobilenav="open"] .railscrim { opacity: 1; visibility: visible; }
+
+  .page { padding: var(--s-5) var(--s-4) var(--s-6); }
+  .cmdbar { padding: 0 var(--s-4); }
+  .searchtrigger { min-width: 0; }
+  .searchtrigger span, .searchtrigger .kbd { display: none; }
+
+  /* Only the current page in the breadcrumb — the parent crumb wraps and
+     crowds the bar at phone widths. */
+  .crumbs > :not(b) { display: none; }
+  .crumbs b { white-space: nowrap; }
+}
+
+@media (min-width: 1024px) {
+  .mobileonly { display: none !important; }
+}
+
+@media (max-width: 640px) {
+  .pagehead { align-items: flex-start; }
+  .toasts { left: var(--s-4); right: var(--s-4); justify-items: stretch; }
+}

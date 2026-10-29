@@ -3,7 +3,6 @@ from functools import lru_cache
 
 from faster_whisper import WhisperModel
 
-
 TAILLE_MODELE = "medium"
 LANGUE = "fr"
 
