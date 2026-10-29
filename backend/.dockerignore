@@ -1,8 +1,12 @@
 .venv/
 __pycache__/
 .git/
-
-comptes_rendus/
+../comptes_rendus/
 *.wav
 *.mp3
 *.m4a
+.pytest_cache/
+.ruff_cache/
+tests/
+requirements-dev.txt
+.env

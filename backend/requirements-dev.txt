@@ -1,0 +1,3 @@
+faster-whisper
+streamlit
+ruff==0.16.10
