@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+.git/
+
+comptes_rendus/
+*.wav
+*.mp3
+*.m4a
