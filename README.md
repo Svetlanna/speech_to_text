@@ -119,7 +119,7 @@ La voix d'un médecin qui parle de son patient est une **donnée de santé**. En
 
 | Phase | Contenu | État |
 |---|---|---|
-| **A** · Fondations | Organisation, transcription, premiers tests | 🟡 A1 ✅ · A2 ✅ · A3 ⏳ en cours |
+| **A** · Fondations | Organisation, transcription, premiers tests | 🟡 A1  · A2  · A3 ⏳ en cours |
 | **B** · Base de données | MCD → MLD → tables MySQL, connexion Python | ⬜ MCD conçu, reste à faire |
 | **C** · API FastAPI | Premières routes, transcription par l'API | ⬜ |
 | **D** · Authentification et rôles | Mots de passe hachés, jetons, contrôle des rôles | ⬜ |
@@ -200,7 +200,7 @@ app_compte_rendu/
 
 ---
 
-## 7. ✅ Prérequis
+## 7.  Prérequis
 
 | Outil | Comment vérifier | Résultat attendu |
 |---|---|---|
@@ -497,7 +497,7 @@ Chaque job ne se lance que si le précédent a réussi · on **échoue vite**
 ▶️ 3. Lancer les tests en local         pytest -v
 🐳 4. Construire et lancer dans Docker   docker build + docker run
 📤 5. Commit et push                     git add / commit / push
-🤖 6. Vérifier la CI sur GitHub          ✅ toutes les coches vertes
+🤖 6. Vérifier la CI sur GitHub           toutes les coches vertes
 ```
 
 Une étape n'est **finie** que quand les 6 marches sont faites. On ne casse jamais le projet entre deux commits
@@ -526,7 +526,7 @@ Une étape n'est **finie** que quand les 6 marches sont faites. On ne casse jama
 
 | Étape | Ce que c'est | État |
 |---|---|---|
-| **MCD** · Modèle Conceptuel de Données | Le plan de la base, dessiné avant de la construire (méthode **Merise**) | ✅ conçu |
+| **MCD** · Modèle Conceptuel de Données | Le plan de la base, dessiné avant de la construire (méthode **Merise**) |  conçu |
 | **MLD** · Modèle Logique de Données | Le MCD transformé en **tables** avec clés primaires et étrangères | 📝 prévision ci-dessous, à valider en B1 |
 | **MPD / SQL** | Le script `schema.sql` qui crée les tables dans MySQL | ⬜ étape B1 |
 
@@ -701,9 +701,9 @@ JOURNAL_ACCES (id_journal 🔑, action, date_action, #id_utilisateur, #id_compte
 
 | Rôle | Dicter | Lire les comptes-rendus | Modifier | Gérer les utilisateurs |
 |---|---|---|---|---|
-| 👨‍⚕️ Médecin | ✅ | ✅ seulement **ses** patients | ✅ les siens (brouillons) | ❌ |
-| 🗂️ Secrétaire | ❌ | ✅ | ❌ | ❌ |
-| 🔧 Administrateur | ❌ | ❌ | ❌ | ✅ |
+| 👨‍⚕️ Médecin |  |  seulement **ses** patients |  les siens (brouillons) |  |
+| 🗂️ Secrétaire |  |  |  |  |
+| 🔧 Administrateur |  |  |  |  |
 
 Principe du **moindre privilège** · chacun a seulement les droits nécessaires. L'administrateur gère les comptes mais **ne lit pas** les données de santé
 
@@ -726,15 +726,15 @@ Principe du **moindre privilège** · chacun a seulement les droits nécessaires
 
 ## 16. 🗺️ La feuille de route complète
 
-Légende · ✅ fait · ⏳ en cours · ⬜ à faire
+Légende ·  fait · ⏳ en cours · ⬜ à faire
 
 ### 🧱 Phase A · Fondations
 
 | # | Étape | 🧪 Tests | 🐳 Docker | 🤖 CI | État |
 |---|---|---|---|---|---|
-| A0 | Projet initial · dossier, environnement, `requirements.txt`, Dockerfile, CI lint + build | — | Image Streamlit | `lint → docker` | ✅ |
-| A1 | `transcription.py` compris ligne par ligne + essai avec un vrai audio | Manuel en terminal | — | — | ✅ (essai avec la fable de La Fontaine) |
-| A2 | Réorganisation `backend/` + `frontend/`, package `app`, versions épinglées, `requirements-dev.txt`, Python 3.14 partout | Import dans l'image | Dockerfile dans `backend/`, `python:3.14-slim` | Chemins mis à jour, `checkout@v5`, `setup-python@v6`, import vérifié dans l'image | ✅ |
+| A0 | Projet initial · dossier, environnement, `requirements.txt`, Dockerfile, CI lint + build | — | Image Streamlit | `lint → docker` |  |
+| A1 | `transcription.py` compris ligne par ligne + essai avec un vrai audio | Manuel en terminal | — | — |  (essai avec la fable de La Fontaine) |
+| A2 | Réorganisation `backend/` + `frontend/`, package `app`, versions épinglées, `requirements-dev.txt`, Python 3.14 partout | Import dans l'image | Dockerfile dans `backend/`, `python:3.14-slim` | Chemins mis à jour, `checkout@v5`, `setup-python@v6`, import vérifié dans l'image |  |
 | A3 | Premiers tests unitaires de `transcrire()` avec un **faux modèle** · fonction `main()`, `pyproject.toml`, `tests/unit/test_transcription.py` | 🧩 5 tests (recollage, texte vide, réglages envoyés, mode d'emploi, affichage) | Import de `main` vérifié | ➕ job `test-unit` · `lint → test-unit → docker` | ⏳ |
 
 ### 🗄️ Phase B · Base de données
@@ -814,7 +814,7 @@ Correspondance des pages · `login.html` → connexion · `index.html` → table
 | `Could not open requirements file ... requirements-dev.txt` | Commande lancée depuis `backend\app\` au lieu de `backend\` | `cd ..` | Toujours lire le chemin après `PS` |
 | `Invalid requirement: 'pytest==X.Y.Z'` | Le trou `X.Y.Z` de la leçon n'avait pas été remplacé | Mettre la vraie version lue avec `pip show` | — |
 | Les deux fichiers requirements identiques | Mauvais onglet modifié / fichier non enregistré | Vérifier l'onglet, `Ctrl + S`, puis `Get-Content` dans le terminal | Le terminal lit le disque, `git diff` montre la vérité |
-| CI `lint` ❌ `I001 Import block is un-sorted or un-formatted` | Deux lignes vides après les imports | `ruff check . --fix` | Lancer `ruff check .` **en local avant le push** |
+| CI `lint`  `I001 Import block is un-sorted or un-formatted` | Deux lignes vides après les imports | `ruff check . --fix` | Lancer `ruff check .` **en local avant le push** |
 | CI ⊘ `docker` jamais lancé | Il dépend de `lint` (`needs`) qui avait échoué | Corriger `lint` | — |
 | Avertissement *Node.js 20 is deprecated* | `checkout@v4` / `setup-python@v5` anciens | `checkout@v5` / `setup-python@v6` | — |
 | `ports are not available ... 8501` | Un Streamlit ou un conteneur utilise déjà la porte | `docker ps` + `docker stop`, **Ctrl + C**, ou `-p 8502:8501` | — |
