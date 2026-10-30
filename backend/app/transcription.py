@@ -92,11 +92,9 @@ def transcrire(audio) -> str:
     return " ".join(morceaux)
 
 
-# Permet de tester depuis le terminal sans l'interface
-if __name__ == "__main__":
+def main() -> None:
     if len(sys.argv) != 2:
-        print("Utilisation · python transcription.py LaFontaine-Lecorbeauetlerenard.mp3")
-
+        print("Utilisation · python -m app.transcription chemin_du_fichier_audio")
         sys.exit(1)
 
     texte = transcrire(sys.argv[1])
