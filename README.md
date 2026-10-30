@@ -150,7 +150,7 @@ app_compte_rendu/
 │   ├── requirements-dev.txt     # -r requirements.txt + pytest + ruff (pas dans Docker)
 │   └── streamlit_app.py         # interface temporaire, supprimée en C1
 ├── frontend/                    # template Brynvel (HTML, CSS, JS)
-│   ├── login.html  index.html  customers.html  analytics.html  billing.html  settings.html
+│   ├── login.html  index.html  patients.html  analytics.html  billing.html  settings.html
 │   └── assets/
 │       ├── css/  tokens.css · shell.css · ui.css
 │       ├── js/   app.js · charts.js
@@ -769,7 +769,7 @@ Légende ·  fait · ⏳ en cours · ⬜ à faire
 
 ### 🎨 Phase F · Frontend Brynvel connecté
 
-Correspondance des pages · `login.html` → connexion · `index.html` → tableau de bord · `customers.html` → liste et fiche des patients · *nouvelle* `dictee.html` → dictée au micro · `settings.html` → profil et gestion des utilisateurs (admin) · `analytics.html` → statistiques et qualité (plus tard) · `billing.html` → supprimée
+Correspondance des pages · `login.html` → connexion · `index.html` → tableau de bord · `patients.html` → liste et fiche des patients · *nouvelle* `dictee.html` → dictée au micro · `settings.html` → profil et gestion des utilisateurs (admin) · `analytics.html` → statistiques et qualité (plus tard) · `billing.html` → supprimée
 
 | # | Étape | 🧪 Tests | 🐳 Docker | 🤖 CI | État |
 |---|---|---|---|---|---|
