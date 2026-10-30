@@ -33,16 +33,16 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements*.txt
       - run: pip install -r requirements-dev.txt
-      - run: pytest tests/unit -v                         # seulement les tests SANS MySQL
+      - run: pytest tests/unit -v
 
   test-integration:
     runs-on: ubuntu-latest
-    needs: test-unit                                      # seulement si les tests unitaires ont réussi
+    needs: test-unit
     services:
-      mysql:                                              # une MySQL temporaire, jetée à la fin
+      mysql:
         image: mysql:8.4
         env:
-          MYSQL_ROOT_PASSWORD: root                   # mot de passe jetable, base vide et temporaire
+          MYSQL_ROOT_PASSWORD: root
         ports:
           - 3333:3306
         options: >-
@@ -50,7 +50,7 @@ jobs:
           --health-interval=5s
           --health-timeout=5s
           --health-retries=20
-    env:                                                  # remplace le .env (qui n'existe pas sur GitHub)
+    env:
       DB_HOTE: 127.0.0.1
       DB_PORT: "3333"
       DB_UTILISATEUR: root
@@ -75,8 +75,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - run: docker build -t app-compte-rendu ./backend
-      - run: docker run -d --name api -p 8000:8000 app-compte-rendu      # -d · tourne en arrière-plan
-      - run: |                                                            # attend jusqu'à 20 s que l'API réponde
+      - run: docker run -d --name api -p 8000:8000 app-compte-rendu
+      - run: | 
           for i in $(seq 1 20); do
             curl -fs http://localhost:8000/sante && exit 0
             sleep 1
