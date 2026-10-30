@@ -93,6 +93,7 @@ def transcrire(audio) -> str:
 
 
 def main() -> None:
+    main()
     if len(sys.argv) != 2:
         print("Utilisation · python -m app.transcription chemin_du_fichier_audio")
         sys.exit(1)
