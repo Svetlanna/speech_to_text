@@ -44,7 +44,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root                   # mot de passe jetable, base vide et temporaire
         ports:
-          - 3333:3333
+          - 3333:3306
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -proot_ci"
           --health-interval=5s
