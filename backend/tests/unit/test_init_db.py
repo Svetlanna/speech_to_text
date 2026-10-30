@@ -5,7 +5,6 @@ import pytest
 from app import init_db
 
 
-
 def test_decouper_sql_enleve_commentaires_et_coupe_aux_points_virgules():
     texte = (
         "-- un commentaire seul\n"
