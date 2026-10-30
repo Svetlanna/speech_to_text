@@ -42,7 +42,7 @@ jobs:
       mysql:                                              # une MySQL temporaire, jetée à la fin
         image: mysql:8.4
         env:
-          MYSQL_ROOT_PASSWORD: root_ci                    # mot de passe jetable, base vide et temporaire
+          MYSQL_ROOT_PASSWORD: root                   # mot de passe jetable, base vide et temporaire
         ports:
           - 3333:3333
         options: >-
@@ -69,11 +69,17 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: python -m app.init_db
       - run: pytest tests/integration -v
-
   docker:
     runs-on: ubuntu-latest
     needs: test-integration
     steps:
       - uses: actions/checkout@v5
       - run: docker build -t app-compte-rendu ./backend
-      - run: docker run --rm app-compte-rendu python -c "from app.transcription import transcrire; print('Import OK')"
+      - run: docker run -d --name api -p 8000:8000 app-compte-rendu      # -d · tourne en arrière-plan
+      - run: |                                                            # attend jusqu'à 20 s que l'API réponde
+          for i in $(seq 1 20); do
+            curl -fs http://localhost:8000/sante && exit 0
+            sleep 1
+          done
+          docker logs api
+          exit 1
