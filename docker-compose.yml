@@ -1,7 +1,14 @@
-
 services:
   api:
     build: ./backend
     image: app-compte-rendu
     ports:
       - "8000:8000"
+
+  web:
+    build: ./frontend
+    image: app-compte-rendu-web
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
