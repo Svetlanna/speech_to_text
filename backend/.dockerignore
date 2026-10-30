@@ -1,17 +1,13 @@
-# Fichiers inutiles dans l'image
 .venv/
 __pycache__/
 .pytest_cache/
 .ruff_cache/
 
-# Outils du développeur, pas besoin dans l'image
 tests/
 requirements-dev.txt
 
-# Secrets · ne jamais les mettre dans l'image
 .env
 
-# Audios · données de santé possibles
 *.wav
 *.mp3
 *.m4a

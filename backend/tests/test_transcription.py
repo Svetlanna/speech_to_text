@@ -1,5 +1,3 @@
-"""Tests unitaires de app/transcription.py · sans le vrai modèle Whisper"""
-
 import sys
 from types import SimpleNamespace
 
@@ -9,25 +7,21 @@ from app import transcription
 
 
 class FauxModele:
-    """Fait semblant d'être WhisperModel · rend des phrases prévues à l'avance"""
 
     def __init__(self, phrases):
-        self.phrases = phrases      # ce que le faux modèle va « entendre »
-        self.audio_recu = None      # mémorise l'audio reçu
-        self.reglages_recus = {}    # mémorise les réglages reçus
+        self.phrases = phrases
+        self.audio_recu = None
+        self.reglages_recus = {}
 
     def transcribe(self, audio, **reglages):
-        # **reglages · récupère tous les réglages nommés dans un dictionnaire
         self.audio_recu = audio
         self.reglages_recus = reglages
-        # Le vrai Whisper rend des objets qui ont un attribut .text
         segments = (SimpleNamespace(text=phrase) for phrase in self.phrases)
         return segments, None       # (segments, infos) comme le vrai
 
 
 @pytest.fixture
 def faux_modele(monkeypatch):
-    """Remplace charger_modele() par le faux modèle, le temps d'un test"""
     modele = FauxModele([" Bonjour Jean Test. ", " Tension artérielle normale. "])
     monkeypatch.setattr(transcription, "charger_modele", lambda: modele)
     return modele
