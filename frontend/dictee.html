@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dictée · Compte-rendu médical</title>
+<meta name="description" content="Dictée d'un compte-rendu médical au micro" />
+
+<script>
+  /* Applied before paint so the chosen theme never flashes. */
+  (function () {
+    try {
+      var t = localStorage.getItem('cr-theme');
+      if (t) document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  })();
+</script>
+
+
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<link rel="stylesheet" href="assets/css/shell.css" />
+<link rel="stylesheet" href="assets/css/ui.css" />
+</head>
+<body>
+
+<div class="app" data-rail="expanded" data-mobilenav="closed">
+
+  <!-- ===================================================================
+       Left rail
+       =================================================================== -->
+  <aside class="rail">
+    <div class="rail__head">
+      <a class="brand" href="index.html" aria-label="Compte-rendu médical · accueil">
+        <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand__word">Compte-rendu médical</span>
+      </a>
+    </div>
+
+    <nav class="rail__scroll" aria-label="Main">
+      <div class="navgroup">
+        <p class="navgroup__title">Suivi</p>
+        <a class="navlink" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          <span>Accueil</span>
+        </a>
+        <a class="navlink" href="analytics.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="m5 15 4-5 4 3 6-8"/></svg>
+          <span>Statistiques</span>
+        </a>
+        <a class="navlink" href="analytics.html#realtime">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l3 8 6-16 3 8h4"/></svg>
+          <span>Temps réel</span>
+          <span class="navlink__tag navlink__tag--live">DIRECT</span>
+        </a>
+      </div>
+
+      <div class="navgroup">
+        <p class="navgroup__title">Gestion</p>
+        <a class="navlink" href="patients.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3.2"/><path d="M22 20v-2a4 4 0 0 0-3-3.8"/><path d="M16 3.2A4 4 0 0 1 16 11"/></svg>
+          <span>Patients</span>
+          <span class="navlink__tag">248</span>
+        </a>
+
+        <a class="navlink" href="dictee.html" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          <span>Dictée</span>
+        </a>
+        <a class="navlink" href="patients.html#segments">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16"/><path d="M7 12h10"/><path d="M10 19h4"/></svg>
+          <span>Groupes</span>
+        </a>
+      </div>
+
+      <div class="navgroup">
+        <p class="navgroup__title">Configuration</p>
+        <a class="navlink" href="settings.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg>
+          <span>Paramètres</span>
+        </a>
+        <a class="navlink" href="settings.html#api">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15.5 8.5 5-5"/><path d="m18 3 3 3"/><path d="M14 9a5 5 0 1 1-7 7 5 5 0 0 1 7-7Z"/></svg>
+          <span>Clés API</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="rail__foot">
+      <div class="usage">
+        <div class="usage__row">
+          <span class="label">Events</span>
+          <span class="num soft">742k / 1M</span>
+        </div>
+        <div class="usage__bar"><div class="usage__fill" style="width:74%"></div></div>
+      </div>
+      <button class="userchip" type="button" data-toast="Account menu is a demo in this template">
+        <img class="avatar avatar--sm" src="assets/img/avatar.svg" width="26" height="26" alt="" loading="lazy" />
+        <span class="userchip__meta">
+          <span class="userchip__name">Ada Ferreira</span>
+          <span class="userchip__sub">Growth · Owner</span>
+        </span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="railscrim" aria-hidden="true"></div>
+
+  <!-- ===================================================================
+       Main
+       =================================================================== -->
+  <div class="main">
+
+    <header class="cmdbar">
+      <button class="btn btn--icon railtoggle" type="button" data-action="toggle-rail" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16"/><path d="m14 10-2 2 2 2"/></svg>
+      </button>
+
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <span>Acme Analytics</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+        <b>Dictée</b>
+      </nav>
+
+      <span class="cmdbar__spacer"></span>
+
+      <button class="searchtrigger" type="button" data-action="open-palette">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <span>Search or jump to…</span>
+        <kbd class="kbd">⌘K</kbd>
+      </button>
+
+      <button class="btn btn--icon" type="button" data-action="toggle-theme" aria-label="Switch to light theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+      </button>
+
+      <button class="btn btn--icon bell" type="button" data-toast="3 unread notifications" aria-label="Notifications, 3 unread">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></svg>
+      </button>
+
+      <img class="avatar avatar--md" src="assets/img/avatar.svg" width="32" height="32" alt="Ada Ferreira" />
+    </header>
+
+    <main class="page">
+
+      <div class="pagehead">
+        <div class="pagehead__title">
+          <h1>Dictée</h1>
+          <p class="pagehead__sub">Dictez au micro · le texte s'affiche, vous pouvez le corriger et réécouter l'audio. L'audio reste dans ce navigateur, il n'est jamais enregistré sur le serveur.</p>
+        </div>
+      </div>
+
+      <section class="panel" aria-labelledby="titre-micro">
+        <div class="panel__head">
+          <h2 id="titre-micro">Micro</h2>
+          <span id="etat-dictee" class="badge" style="width:fit-content">Prêt</span>
+        </div>
+
+        <!-- les trois boutons · seul « Enregistrer » est actif au départ -->
+        <div style="display:flex;gap:var(--s-3);flex-wrap:wrap">
+          <button id="bouton-enregistrer" class="btn btn--primary" type="button">🔴 Enregistrer</button>
+          <button id="bouton-arreter" class="btn btn--ghost" type="button" disabled>⏹️ Arrêter</button>
+          <button id="bouton-effacer" class="btn btn--danger" type="button" disabled>🗑️ Effacer l'audio</button>
+        </div>
+
+        <!-- lecteur pour réécouter · caché tant qu'il n'y a pas d'audio -->
+        <audio id="lecteur-audio" controls hidden style="width:100%;margin-top:var(--s-4)"></audio>
+      </section>
+
+      <section class="panel" aria-labelledby="titre-texte" style="margin-top:var(--s-5)">
+        <div class="panel__head">
+          <h2 id="titre-texte">Texte transcrit</h2>
+        </div>
+        <label class="sr-only" for="texte-transcrit">Texte transcrit, modifiable</label>
+        <textarea id="texte-transcrit" class="textarea" rows="10" placeholder="Le texte de la dictée apparaîtra ici, vous pourrez le corriger"></textarea>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- =====================================================================
+     Command palette
+     ===================================================================== -->
+<div class="scrim" id="paletteScrim" data-open="false" aria-hidden="true"></div>
+<div class="palette" data-open="false" role="dialog" aria-modal="true" aria-label="Command palette">
+  <input class="palette__input" type="text" placeholder="Search pages, customers, actions…" aria-label="Search" />
+  <div class="palette__list">
+    <p class="palette__group label">Navigate</p>
+    <a class="palette__item" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Accueil<kbd class="kbd">G O</kbd></a>
+    <a class="palette__item" href="analytics.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="m5 15 4-5 4 3 6-8"/></svg>Statistiques<kbd class="kbd">G A</kbd></a>
+    <a class="palette__item" href="patients.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="3.2"/><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/></svg>Patients<kbd class="kbd">G C</kbd></a>
+
+    <a class="palette__item" href="dictee.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Dictée<kbd class="kbd">G D</kbd></a>
+    <a class="palette__item" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M4 12h2M18 12h2M12 4v2M12 18v2"/></svg>Paramètres<kbd class="kbd">G S</kbd></a>
+    <p class="palette__group label">Actions</p>
+    <button class="palette__item" type="button" data-toast="Report builder is a demo in this template"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Create report</button>
+    <button class="palette__item" type="button" data-action="toggle-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>Toggle theme</button>
+    <a class="palette__item" href="login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>Sign out</a>
+    <p class="palette__empty" hidden>No matches.</p>
+  </div>
+</div>
+
+<div class="toasts" aria-live="polite"></div>
+
+<script src="assets/js/app.js" defer></script>
+<script src="assets/js/dictee.js" defer></script>
+</body>
+</html>
