@@ -92,12 +92,10 @@ def transcrire(audio) -> str:
     return " ".join(morceaux)
 
 
-def main() -> None:
-    main()                     # ← main() s'appelle elle-même, qui s'appelle elle-même, qui...
-    if len(sys.argv) != 2:
-        print("Utilisation · python -m app.transcription chemin_du_fichier_audio")
-        sys.exit(1)
-
     texte = transcrire(sys.argv[1])
     print("\n--- Transcription ---\n")
     print(texte)
+
+
+if __name__ == "__main__":
+    main()
