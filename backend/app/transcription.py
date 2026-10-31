@@ -110,3 +110,4 @@ def main() -> None:
 
 if __name__ == "__main__":  # vrai seulement quand on lance ce fichier directement
     main()
+

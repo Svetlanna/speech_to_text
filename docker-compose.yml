@@ -4,11 +4,17 @@ services:
     image: app-compte-rendu
     ports:
       - "8000:8000"
+    volumes:
+      - cache_whisper:/root/.cache/huggingface   # garde le modèle Whisper entre deux démarrages
 
-  web:
+
+  web:                          # le front, servi par nginx
     build: ./frontend
     image: app-compte-rendu-web
     ports:
       - "8081:80"
     depends_on:
       - api
+
+volumes:
+  cache_whisper:

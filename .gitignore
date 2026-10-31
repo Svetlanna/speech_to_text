@@ -14,3 +14,8 @@ comptes_rendus/
 *.m4a
 PROMPT_REPRISE.md
 Raport.txt
+docs
+
+audios_test/
+*.webm
+*.ogg
