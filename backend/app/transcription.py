@@ -97,5 +97,16 @@ def transcrire(audio) -> str:
     print(texte)
 
 
-if __name__ == "__main__":
+
+def main() -> None:
+    if len(sys.argv) != 2:                       # il faut exactement 1 argument · le chemin de l'audio
+        print("Utilisation · python -m app.transcription chemin_du_fichier_audio")
+        sys.exit(1)                              # 1 = « terminé avec une erreur »
+
+    texte = transcrire(sys.argv[1])
+    print("\n--- Transcription ---\n")
+    print(texte)
+
+
+if __name__ == "__main__":  # vrai seulement quand on lance ce fichier directement
     main()
